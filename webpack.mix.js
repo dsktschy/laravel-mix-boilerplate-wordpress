@@ -1,5 +1,6 @@
 const mix = require('laravel-mix')
 const fs = require('fs-extra')
+require('laravel-mix-copy-watched')
 
 // Clean output directory
 fs.removeSync('wp-content/themes/input-theme-name/assets')
@@ -13,6 +14,11 @@ mix
   .sass(
     'resources/themes/input-theme-name/assets/css/app.scss',
     'wp-content/themes/input-theme-name/assets/css'
+  )
+  .copyWatched(
+    'resources/themes/input-theme-name/assets/images/**/*',
+    'wp-content/themes/input-theme-name/assets/images',
+    { base: 'resources/themes/input-theme-name/assets/images' }
   )
   .version()
 
