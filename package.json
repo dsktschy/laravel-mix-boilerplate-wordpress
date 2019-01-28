@@ -4,14 +4,20 @@
   "description": "Boilerplate of Laravel Mix",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "npm run watch",
+    "prod": "npm run production"
   },
   "keywords": [],
   "author": "dsktschy",
   "license": "ISC",
   "devDependencies": {
     "imagemin": "^6.0.0",
-    "laravel-mix": "^4.0.8"
+    "laravel-mix": "^4.0.8",
+    "resolve-url-loader": "^2.3.1",
+    "sass": "^1.16.1",
+    "sass-loader": "^7.1.0"
   },
   "repository": {
     "type": "git"
