@@ -1,5 +1,9 @@
 const mix = require('laravel-mix')
 const fs = require('fs-extra')
+const imagemin = require('imagemin')
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const imageminPngquant = require('imagemin-pngquant')
+const imageminGifsicle = require('imagemin-gifsicle')
 require('laravel-mix-copy-watched')
 
 // Clean output directory
@@ -21,6 +25,23 @@ mix
     { base: 'resources/themes/input-theme-name/assets/images' }
   )
   .version()
+
+if (process.env.NODE_ENV === "production") {
+  mix.then(() => {
+    console.log('Optimizing images...')
+    imagemin(
+      [ 'wp-content/themes/input-theme-name/assets/images/**/*.{jpg,png,gif,svg}' ],
+      'wp-content/themes/input-theme-name/assets/images',
+      {
+        plugins: [
+          imageminMozjpeg({ quality: 80 }),
+          imageminPngquant({ quality: [ 0.65, 0.8 ] }),
+          imageminGifsicle()
+        ]
+      }
+    )
+  })
+}
 
 // Full API
 // mix.js(src, output);
