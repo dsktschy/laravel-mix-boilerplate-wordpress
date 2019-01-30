@@ -18,6 +18,14 @@
     src="<?php echo get_stylesheet_directory_uri() . mix('/assets/images/app.png'); ?>"
     alt="SAMPLE"
   >
+  <svg class="svg-a">
+    <title>SAMPLE A</title>
+    <use xlink:href="#sprite-sample-a"></use>
+  </svg>
+  <svg class="svg-b">
+    <title>SAMPLE B</title>
+    <use xlink:href="#sprite-sample-b"></use>
+  </svg>
 </body>
   <script src="<?php echo get_stylesheet_directory_uri() . mix('/assets/js/app.js'); ?>"></script>
 </html>
