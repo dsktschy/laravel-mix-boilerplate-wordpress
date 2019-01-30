@@ -1,9 +1,11 @@
 const mix = require('laravel-mix')
 const fs = require('fs-extra')
+const path = require('path')
 const imagemin = require('imagemin')
 const imageminMozjpeg = require('imagemin-mozjpeg')
 const imageminPngquant = require('imagemin-pngquant')
 const imageminGifsicle = require('imagemin-gifsicle')
+const globby = require('globby')
 require('laravel-mix-copy-watched')
 
 // Clean output directory
@@ -20,26 +22,28 @@ mix
     'wp-content/themes/input-theme-name/assets/css'
   )
   .copyWatched(
-    'resources/themes/input-theme-name/assets/images/**/*',
+    'resources/themes/input-theme-name/assets/images/**/*.{jpg,jpeg,png,gif}',
     'wp-content/themes/input-theme-name/assets/images',
     { base: 'resources/themes/input-theme-name/assets/images' }
   )
   .version()
 
 if (process.env.NODE_ENV === "production") {
-  mix.then(() => {
-    console.log('Optimizing images...')
-    imagemin(
-      [ 'wp-content/themes/input-theme-name/assets/images/**/*.{jpg,png,gif,svg}' ],
-      'wp-content/themes/input-theme-name/assets/images',
-      {
+  mix.then(async () => {
+    const targets = globby.sync(
+      'wp-content/themes/input-theme-name/assets/images/**/*.{jpg,jpeg,png,gif}',
+      { onlyFiles: true }
+    )
+    for (let target of targets) {
+      console.log(`Optimizing ${target}`)
+      await imagemin([ target ], path.dirname(target), {
         plugins: [
           imageminMozjpeg({ quality: 80 }),
           imageminPngquant({ quality: [ 0.65, 0.8 ] }),
           imageminGifsicle()
         ]
-      }
-    )
+      }).catch(error => { throw error })
+    }
   })
 }
 
