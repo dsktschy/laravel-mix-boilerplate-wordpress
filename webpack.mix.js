@@ -50,7 +50,8 @@ mix
               plugins: [
                 { removeTitle: true },
                 { cleanupIDs: true },
-                { removeAttrs: { attrs: '(fill|stroke|data.*)' } }
+                { removeAttrs: { attrs: '(fill|stroke|data.*)' } },
+                { addClassesToSVGElement: { className: 'svg-sprite' } }
               ]
             },
             svg4everybody: true

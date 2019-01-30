@@ -13,6 +13,7 @@
   >
 </head>
 <body>
+  <?php echo file_get_contents(get_stylesheet_directory() . '/assets/svg/sprite.svg'); ?>
   <h1>Laravel Mix Boilerplate</h1>
   <img
     src="<?php echo get_stylesheet_directory_uri() . mix('/assets/images/app.png'); ?>"
