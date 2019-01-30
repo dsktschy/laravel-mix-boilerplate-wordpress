@@ -62,6 +62,8 @@ mix
 
 if (process.env.NODE_ENV === "production") {
   mix.then(async () => {
+    // Execute imagemin for each file in loop
+    // Because imagemin can't keep hierarchical structure
     const targets = globby.sync(
       'wp-content/themes/input-theme-name/assets/images/**/*.{jpg,jpeg,png,gif}',
       { onlyFiles: true }
