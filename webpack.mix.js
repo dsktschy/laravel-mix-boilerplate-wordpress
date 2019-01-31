@@ -31,6 +31,22 @@ mix
   )
   .version()
   .webpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.jsx?$/,
+          loader: 'prettier-loader',
+          exclude: /node_modules/,
+          options: { parser: 'babel' }
+        },
+        {
+          test: /\.(scss|css)?$/,
+          loader: 'prettier-loader',
+          exclude: /node_modules/,
+          options: { parser: 'scss' }
+        }
+      ]
+    },
     plugins: [
       new SVGSpritemapPlugin(
         // Subdirectories (svg/**/*.svg) are not allowed
