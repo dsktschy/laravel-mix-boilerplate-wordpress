@@ -31,6 +31,11 @@ mix
   )
   .version()
   .webpackConfig({
+    // Prettier Loader has problem that it cause file saving one more time
+    // Therefore following loaders are triggered twice
+    // If this problem is not allowed,
+    // you can turn off Prettier Loader by removing the following two module.rules
+    // Details here: https://github.com/iamolegga/prettier-loader/issues/1
     module: {
       rules: [
         {
