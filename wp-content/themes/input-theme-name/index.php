@@ -12,7 +12,7 @@
     href="<?php echo get_stylesheet_directory_uri() . mix('/assets/css/app.css'); ?>"
   >
 </head>
-<body>
+<body class='js-target'>
   <?php echo file_get_contents(get_stylesheet_directory() . '/assets/svg/sprite.svg'); ?>
   <h1>Laravel Mix Boilerplate</h1>
   <ul>
