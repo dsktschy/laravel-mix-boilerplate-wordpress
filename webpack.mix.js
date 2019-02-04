@@ -84,35 +84,7 @@ mix
   })
   .version()
 
-if (process.env.NODE_ENV !== "production" && process.env.BROWSER_SYNC_PROXY) {
-  const options = {
-    open: false,
-    host: process.env.BROWSER_SYNC_HOST || 'localhost',
-    port: process.env.BROWSER_SYNC_PORT || 3000,
-    proxy: process.env.BROWSER_SYNC_PROXY || '',
-    // If setting: 'wp-content/themes/input-theme-name/**/*',
-    // injection of changes such as CSS will be not available
-    // https://github.com/JeffreyWay/laravel-mix/issues/1053
-    // Prettier Loader has problem that it cause file saving one more time
-    // Therefore reload / injection are triggered twice
-    // Options of BrowserSync (e.g. reloadDebounce) can not prevent this
-    // If this problem is not allowed, you can turn off Prettier Loader
-    // by removing two module.rules in argument of webpackConfig method
-    // https://github.com/iamolegga/prettier-loader/issues/1
-    files: [
-      'wp-content/themes/input-theme-name/assets/**/*',
-      'wp-content/themes/input-theme-name/**/*.php'
-    ]
-  }
-  if (process.env.BROWSER_SYNC_PROXY.startsWith('https://')) {
-    options.https = {
-      key: process.env.BROWSER_SYNC_HTTPS_KEY || '',
-      cert: process.env.BROWSER_SYNC_HTTPS_CERT || ''
-    }
-  }
-  mix.browserSync(options)
-}
-
+// Only in production mode
 if (process.env.NODE_ENV === "production") {
   mix.then(async () => {
     // Execute imagemin for each file in loop
@@ -138,6 +110,38 @@ if (process.env.NODE_ENV === "production") {
     delete manifest[`/${svgDummyModuleName}.js`]
     fs.writeFileSync(path.resolve(pathToManifest), JSON.stringify(manifest), 'utf-8')
   })
+}
+
+// Only in development mode
+else {
+  if (process.env.BROWSER_SYNC_PROXY) {
+    const options = {
+      open: false,
+      host: process.env.BROWSER_SYNC_HOST || 'localhost',
+      port: process.env.BROWSER_SYNC_PORT || 3000,
+      proxy: process.env.BROWSER_SYNC_PROXY || '',
+      // If setting: 'wp-content/themes/input-theme-name/**/*',
+      // injection of changes such as CSS will be not available
+      // https://github.com/JeffreyWay/laravel-mix/issues/1053
+      // Prettier Loader has problem that it cause file saving one more time
+      // Therefore reload / injection are triggered twice
+      // Options of BrowserSync (e.g. reloadDebounce) can not prevent this
+      // If this problem is not allowed, you can turn off Prettier Loader
+      // by removing two module.rules in argument of webpackConfig method
+      // https://github.com/iamolegga/prettier-loader/issues/1
+      files: [
+        'wp-content/themes/input-theme-name/assets/**/*',
+        'wp-content/themes/input-theme-name/**/*.php'
+      ]
+    }
+    if (process.env.BROWSER_SYNC_PROXY.startsWith('https://')) {
+      options.https = {
+        key: process.env.BROWSER_SYNC_HTTPS_KEY || '',
+        cert: process.env.BROWSER_SYNC_HTTPS_CERT || ''
+      }
+    }
+    mix.browserSync(options)
+  }
 }
 
 // Full API
