@@ -1,5 +1,6 @@
 require('dotenv').config()
 const mix = require('laravel-mix')
+const Log = require('laravel-mix/src/Log')
 const fs = require('fs-extra')
 const path = require('path')
 const imagemin = require('imagemin')
@@ -121,7 +122,7 @@ if (process.env.NODE_ENV === "production") {
       { onlyFiles: true }
     )
     for (let target of targets) {
-      console.log(`Optimizing ${target}`)
+      Log.feedback(`Optimizing ${target}`)
       await imagemin([ target ], path.dirname(target), {
         plugins: [
           imageminMozjpeg({ quality: 80 }),
