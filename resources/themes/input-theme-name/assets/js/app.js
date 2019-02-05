@@ -4,4 +4,6 @@ const sample = new Sample({
   elements: [...document.querySelectorAll(".js-target")],
   classNameActive: "is-active"
 });
-sample.activate();
+setTimeout(() => {
+  sample.activate();
+}, 500);
