@@ -1,5 +1,5 @@
 node_modules
 npm-debug.log
-wp-content/themes/input-theme-name/mix-manifest.json
-wp-content/themes/input-theme-name/assets
+wp-content/themes/*/mix-manifest.json
+wp-content/themes/*/assets
 .env
