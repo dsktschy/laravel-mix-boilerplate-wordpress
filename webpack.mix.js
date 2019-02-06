@@ -134,11 +134,10 @@ else {
         'wp-content/themes/input-theme-name/**/*.php'
       ]
     }
-    if (process.env.BROWSER_SYNC_PROXY.startsWith('https://')) {
-      options.https = {
-        key: process.env.BROWSER_SYNC_HTTPS_KEY || '',
-        cert: process.env.BROWSER_SYNC_HTTPS_CERT || ''
-      }
+    const cert = process.env.BROWSER_SYNC_HTTPS_CERT
+    const key = process.env.BROWSER_SYNC_HTTPS_KEY
+    if (cert && key) {
+      options.https = { cert, key }
     }
     mix.browserSync(options)
   }
