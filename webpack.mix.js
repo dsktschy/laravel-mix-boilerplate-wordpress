@@ -13,23 +13,29 @@ require('laravel-mix-copy-watched')
 
 const svgDummyModuleName = 'assets/js/.svg-dummy-module'
 
+// Replace 'input-theme-name' to your theme name
+// And rename following directories to same name as this variable
+// resources/themes/input-theme-name
+// wp-content/themes/input-theme-name
+const themeName = 'input-theme-name'
+
 // Clean output directory
-fs.removeSync('wp-content/themes/input-theme-name/assets')
+fs.removeSync(`wp-content/themes/${themeName}/assets`)
 mix
   // Set output directory of mix-manifest.json
-  .setPublicPath('wp-content/themes/input-theme-name')
+  .setPublicPath(`wp-content/themes/${themeName}`)
   .js(
-    'resources/themes/input-theme-name/assets/js/app.js',
-    'wp-content/themes/input-theme-name/assets/js'
+    `resources/themes/${themeName}/assets/js/app.js`,
+    `wp-content/themes/${themeName}/assets/js`
   )
   .sass(
-    'resources/themes/input-theme-name/assets/css/app.scss',
-    'wp-content/themes/input-theme-name/assets/css'
+    `resources/themes/${themeName}/assets/css/app.scss`,
+    `wp-content/themes/${themeName}/assets/css`
   )
   .copyWatched(
-    'resources/themes/input-theme-name/assets/images/**/*.{jpg,jpeg,png,gif}',
-    'wp-content/themes/input-theme-name/assets/images',
-    { base: 'resources/themes/input-theme-name/assets/images' }
+    `resources/themes/${themeName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
+    `wp-content/themes/${themeName}/assets/images`,
+    { base: `resources/themes/${themeName}/assets/images` }
   )
   .webpackConfig({
     // Prettier Loader has problem that it cause file saving one more time
@@ -58,7 +64,7 @@ mix
         // Subdirectories (svg/**/*.svg) are not allowed
         // Because same ID attribute is output multiple times,
         // if file names are duplicated among multiple directories
-        'resources/themes/input-theme-name/assets/svg/sprite/*.svg',
+        `resources/themes/${themeName}/assets/svg/sprite/*.svg`,
         {
           output: {
             filename: 'assets/svg/sprite.svg',
@@ -90,7 +96,7 @@ if (process.env.NODE_ENV === "production") {
     // Execute imagemin for each file in loop
     // Because imagemin can't keep hierarchical structure
     const targets = globby.sync(
-      'wp-content/themes/input-theme-name/assets/images/**/*.{jpg,jpeg,png,gif}',
+      `wp-content/themes/${themeName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
       { onlyFiles: true }
     )
     for (let target of targets) {
@@ -104,8 +110,8 @@ if (process.env.NODE_ENV === "production") {
       }).catch(error => { throw error })
     }
     // In production, delete chunk file for SVG sprite
-    fs.removeSync(`wp-content/themes/input-theme-name/${svgDummyModuleName}.js`)
-    const pathToManifest = 'wp-content/themes/input-theme-name/mix-manifest.json'
+    fs.removeSync(`wp-content/themes/${themeName}/${svgDummyModuleName}.js`)
+    const pathToManifest = `wp-content/themes/${themeName}/mix-manifest.json`
     const manifest = require(`./${pathToManifest}`)
     delete manifest[`/${svgDummyModuleName}.js`]
     fs.writeFileSync(path.resolve(pathToManifest), JSON.stringify(manifest), 'utf-8')
@@ -120,7 +126,7 @@ else {
       host: process.env.BROWSER_SYNC_HOST || 'localhost',
       port: process.env.BROWSER_SYNC_PORT || 3000,
       proxy: process.env.BROWSER_SYNC_PROXY || '',
-      // If setting: 'wp-content/themes/input-theme-name/**/*',
+      // If setting: `wp-content/themes/${themeName}/**/*`,
       // injection of changes such as CSS will be not available
       // https://github.com/JeffreyWay/laravel-mix/issues/1053
       // Prettier Loader has problem that it cause file saving one more time
@@ -130,8 +136,8 @@ else {
       // by removing two module.rules in argument of webpackConfig method
       // https://github.com/iamolegga/prettier-loader/issues/1
       files: [
-        'wp-content/themes/input-theme-name/assets/**/*',
-        'wp-content/themes/input-theme-name/**/*.php'
+        `wp-content/themes/${themeName}/assets/**/*`,
+        `wp-content/themes/${themeName}/**/*.php`
       ]
     }
     const cert = process.env.BROWSER_SYNC_HTTPS_CERT
