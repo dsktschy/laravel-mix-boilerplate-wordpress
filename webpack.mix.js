@@ -13,11 +13,13 @@ require('laravel-mix-copy-watched')
 
 const svgDummyModuleName = 'assets/js/.svg-dummy-module'
 
-// Replace 'input-theme-name' to your theme name
-// And rename following directories to same name as this variable
-// resources/themes/input-theme-name
-// wp-content/themes/input-theme-name
+// 1. Edit name and description in package.json
+// 2. Edit wp-content/themes/input-theme-name/style.css
+// 3. Replace 'input-theme-name' in following line to your theme name
 const themeName = 'input-theme-name'
+// 4. Rename following directories to same name as this variable
+//   resources/themes/input-theme-name
+//   wp-content/themes/input-theme-name
 
 // Clean output directory
 fs.removeSync(`wp-content/themes/${themeName}/assets`)
