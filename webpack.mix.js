@@ -10,6 +10,7 @@ const imageminGifsicle = require('imagemin-gifsicle')
 const globby = require('globby')
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
 require('laravel-mix-copy-watched')
+require('laravel-mix-eslint')
 
 const svgDummyModuleName = 'assets/js/.svg-dummy-module'
 
@@ -30,6 +31,7 @@ mix
     `resources/themes/${themeName}/assets/js/app.js`,
     `wp-content/themes/${themeName}/assets/js`
   )
+  .eslint()
   .sass(
     `resources/themes/${themeName}/assets/css/app.scss`,
     `wp-content/themes/${themeName}/assets/css`
