@@ -11,6 +11,7 @@ const globby = require('globby')
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
 require('laravel-mix-copy-watched')
 require('laravel-mix-eslint')
+require('laravel-mix-stylelint')
 
 const svgDummyModuleName = 'assets/js/.svg-dummy-module'
 
@@ -36,6 +37,7 @@ mix
     `resources/themes/${themeName}/assets/css/app.scss`,
     `wp-content/themes/${themeName}/assets/css`
   )
+  .stylelint()
   .copyWatched(
     `resources/themes/${themeName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
     `wp-content/themes/${themeName}/assets/images`,
