@@ -25,9 +25,11 @@ const themeName = 'input-theme-name'
 
 // Clean output directory
 fs.removeSync(`wp-content/themes/${themeName}/assets`)
+
 mix
   // Set output directory of mix-manifest.json
   .setPublicPath(`wp-content/themes/${themeName}`)
+  .version()
   .js(
     `resources/themes/${themeName}/assets/js/app.js`,
     `wp-content/themes/${themeName}/assets/js`
@@ -44,13 +46,13 @@ mix
     { base: `resources/themes/${themeName}/assets/images` }
   )
   .webpackConfig({
-    // Prettier Loader has problem that it cause file saving one more time
-    // Therefore following loaders are triggered twice
-    // If this problem is not allowed,
-    // you can turn off Prettier Loader by removing the following two module.rules
-    // Details here: https://github.com/iamolegga/prettier-loader/issues/1
     module: {
       rules: [
+        // Prettier Loader has problem that it cause file saving one more time
+        // Therefore following loaders are triggered twice
+        // If this problem is not allowed,
+        // you can turn off Prettier Loader by removing the following two module.rules
+        // Details here: https://github.com/iamolegga/prettier-loader/issues/1
         {
           test: /\.jsx?$/,
           loader: 'prettier-loader',
@@ -94,7 +96,6 @@ mix
       )
     ]
   })
-  .version()
 
 // Only in production mode
 if (process.env.NODE_ENV === "production") {
