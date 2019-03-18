@@ -25,9 +25,11 @@ const themeName = 'input-theme-name'
 
 // Clean output directory
 fs.removeSync(`wp-content/themes/${themeName}/assets`)
+
 mix
   // Set output directory of mix-manifest.json
   .setPublicPath(`wp-content/themes/${themeName}`)
+  .version()
   .js(
     `resources/themes/${themeName}/assets/js/app.js`,
     `wp-content/themes/${themeName}/assets/js`
@@ -73,7 +75,6 @@ mix
       )
     ]
   })
-  .version()
 
 // Only in production mode
 if (process.env.NODE_ENV === "production") {
