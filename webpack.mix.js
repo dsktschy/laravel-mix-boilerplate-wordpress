@@ -15,13 +15,11 @@ require('laravel-mix-stylelint')
 
 const svgDummyModuleName = 'assets/js/.svg-dummy-module'
 
-// 1. Edit name and description in package.json
-// 2. Edit wp-content/themes/input-theme-name/style.css
-// 3. Replace 'input-theme-name' in following line to your theme name
-const themeName = 'input-theme-name'
-// 4. Rename following directories to same name as this variable
+// 1. Replace following 'input-theme-name' to your theme name
+// 2. Rename following directories to your theme name
 //   resources/themes/input-theme-name
 //   wp-content/themes/input-theme-name
+const themeName = 'input-theme-name'
 
 const resourcesThemeDirName = `resources/themes/${themeName}`
 const wpContentThemeDirName = `wp-content/themes/${themeName}`
@@ -119,7 +117,7 @@ else {
       host: process.env.BROWSER_SYNC_HOST || 'localhost',
       port: process.env.BROWSER_SYNC_PORT || 3000,
       proxy: process.env.BROWSER_SYNC_PROXY || '',
-      // If setting: `${wpContentThemeDirName}/**/*`,
+      // If this setting is `${wpContentThemeDirName}/**/*`,
       // injection of changes such as CSS will be not available
       // https://github.com/JeffreyWay/laravel-mix/issues/1053
       files: [
