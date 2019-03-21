@@ -9,6 +9,7 @@ const imageminPngquant = require('imagemin-pngquant')
 const imageminGifsicle = require('imagemin-gifsicle')
 const globby = require('globby')
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
+require('laravel-mix-polyfill')
 require('laravel-mix-copy-watched')
 require('laravel-mix-eslint')
 require('laravel-mix-stylelint')
@@ -31,6 +32,7 @@ mix
   // Set output directory of mix-manifest.json
   .setPublicPath(wpContentThemeDirName)
   .version()
+  .polyfill()
   .js(
     `${resourcesThemeDirName}/assets/js/app.js`,
     `${wpContentThemeDirName}/assets/js`
