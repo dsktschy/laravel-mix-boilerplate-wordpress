@@ -31,7 +31,6 @@ fs.removeSync(`${wpContentThemeDirName}/assets`)
 mix
   // Set output directory of mix-manifest.json
   .setPublicPath(wpContentThemeDirName)
-  .version()
   .polyfill()
   .js(
     `${resourcesThemeDirName}/assets/js/app.js`,
@@ -81,30 +80,32 @@ mix
 
 // Only in production mode
 if (process.env.NODE_ENV === "production") {
-  mix.then(async () => {
-    // Execute imagemin for each file in loop
-    // Because imagemin can't keep hierarchical structure
-    const targets = globby.sync(
-      `${wpContentThemeDirName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
-      { onlyFiles: true }
-    )
-    for (let target of targets) {
-      Log.feedback(`Optimizing ${target}`)
-      await imagemin([ target ], path.dirname(target), {
-        plugins: [
-          imageminMozjpeg({ quality: 100 }), // 0 ~ 100
-          imageminPngquant({ quality: [ 1, 1 ] }), // 0 ~ 1
-          imageminGifsicle({ optimizationLevel: 3 }) // 1 ~ 3
-        ]
-      }).catch(error => { throw error })
-    }
-    // In production, delete chunk file for SVG sprite
-    fs.removeSync(`${wpContentThemeDirName}/${svgDummyModuleName}.js`)
-    const pathToManifest = `${wpContentThemeDirName}/mix-manifest.json`
-    const manifest = require(`./${pathToManifest}`)
-    delete manifest[`/${svgDummyModuleName}.js`]
-    fs.writeFileSync(path.resolve(pathToManifest), JSON.stringify(manifest), 'utf-8')
-  })
+  mix
+    .version()
+    .then(async () => {
+      // Execute imagemin for each file in loop
+      // Because imagemin can't keep hierarchical structure
+      const targets = globby.sync(
+        `${wpContentThemeDirName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
+        { onlyFiles: true }
+      )
+      for (let target of targets) {
+        Log.feedback(`Optimizing ${target}`)
+        await imagemin([ target ], path.dirname(target), {
+          plugins: [
+            imageminMozjpeg({ quality: 100 }), // 0 ~ 100
+            imageminPngquant({ quality: [ 1, 1 ] }), // 0 ~ 1
+            imageminGifsicle({ optimizationLevel: 3 }) // 1 ~ 3
+          ]
+        }).catch(error => { throw error })
+      }
+      // In production, delete chunk file for SVG sprite
+      fs.removeSync(`${wpContentThemeDirName}/${svgDummyModuleName}.js`)
+      const pathToManifest = `${wpContentThemeDirName}/mix-manifest.json`
+      const manifest = require(`./${pathToManifest}`)
+      delete manifest[`/${svgDummyModuleName}.js`]
+      fs.writeFileSync(path.resolve(pathToManifest), JSON.stringify(manifest), 'utf-8')
+    })
 }
 
 // Only in development mode
