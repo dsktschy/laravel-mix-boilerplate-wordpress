@@ -43,7 +43,7 @@ mix
   )
   .stylelint()
   .copyWatched(
-    `${resourcesThemeDirName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
+    `${resourcesThemeDirName}/assets/images`,
     `${wpContentThemeDirName}/assets/images`,
     { base: `${resourcesThemeDirName}/assets/images` }
   )
