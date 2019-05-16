@@ -31,7 +31,7 @@ fs.removeSync(`${wpContentThemeDirName}/assets`)
 mix
   // Set output directory of mix-manifest.json
   .setPublicPath(wpContentThemeDirName)
-  .polyfill()
+  .polyfill({ corejs: 3 })
   .js(
     `${resourcesThemeDirName}/assets/js/app.js`,
     `${wpContentThemeDirName}/assets/js`
