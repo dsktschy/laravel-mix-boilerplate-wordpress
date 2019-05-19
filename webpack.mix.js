@@ -1,18 +1,13 @@
 require('dotenv').config()
 const mix = require('laravel-mix')
-const Log = require('laravel-mix/src/Log')
 const fs = require('fs-extra')
-const path = require('path')
-const imagemin = require('imagemin')
-const imageminMozjpeg = require('imagemin-mozjpeg')
-const imageminPngquant = require('imagemin-pngquant')
-const imageminGifsicle = require('imagemin-gifsicle')
-const globby = require('globby')
+const multimatch = require('multimatch')
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
 require('laravel-mix-polyfill')
 require('laravel-mix-copy-watched')
 require('laravel-mix-eslint')
 require('laravel-mix-stylelint')
+require('laravel-mix-imagemin')
 
 const svgDummyModuleName = 'assets/js/.svg-dummy-module'
 
@@ -31,7 +26,7 @@ fs.removeSync(`${wpContentThemeDirName}/assets`)
 mix
   // Set output directory of mix-manifest.json
   .setPublicPath(wpContentThemeDirName)
-  .polyfill({ corejs: 3 })
+  .polyfill()
   .js(
     `${resourcesThemeDirName}/assets/js/app.js`,
     `${wpContentThemeDirName}/assets/js`
@@ -42,11 +37,6 @@ mix
     `${wpContentThemeDirName}/assets/css`
   )
   .stylelint()
-  .copyWatched(
-    `${resourcesThemeDirName}/assets/images`,
-    `${wpContentThemeDirName}/assets/images`,
-    { base: `${resourcesThemeDirName}/assets/images` }
-  )
   .webpackConfig({
     plugins: [
       new SVGSpritemapPlugin(
@@ -80,26 +70,22 @@ mix
 
 // Only in production mode
 if (process.env.NODE_ENV === "production") {
+  const patterns = [ 'assets/images/**/*' ]
   mix
     .version()
-    .then(async () => {
-      // Execute imagemin for each file in loop
-      // Because imagemin can't keep hierarchical structure
-      const targets = globby.sync(
-        `${wpContentThemeDirName}/assets/images/**/*.{jpg,jpeg,png,gif}`,
-        { onlyFiles: true }
-      )
-      for (let target of targets) {
-        Log.feedback(`Optimizing ${target}`)
-        await imagemin([ target ], path.dirname(target), {
-          plugins: [
-            imageminMozjpeg({ quality: 100 }), // 0 ~ 100
-            imageminPngquant({ quality: [ 1, 1 ] }), // 0 ~ 1
-            imageminGifsicle({ optimizationLevel: 3 }) // 1 ~ 3
-          ]
-        }).catch(error => { throw error })
+    // Copy and minify images in production
+    .imagemin(
+      patterns,
+      { context: resourcesThemeDirName },
+      {
+        test: filePath => !!multimatch(filePath, patterns).length,
+        optipng: { optimizationLevel: 0 }, // 0 ~ 7
+        gifsicle: { optimizationLevel: 1 }, // 1 ~ 3
+        plugins: [ require('imagemin-mozjpeg')({ quality: 100 }) ] // 0 ~ 100
       }
-      // In production, delete chunk file for SVG sprite
+    )
+    // Delete chunk file for SVG sprite
+    .then(() => {
       fs.removeSync(`${wpContentThemeDirName}/${svgDummyModuleName}.js`)
       const pathToManifest = `${wpContentThemeDirName}/mix-manifest.json`
       const manifest = require(`./${pathToManifest}`)
@@ -110,6 +96,12 @@ if (process.env.NODE_ENV === "production") {
 
 // Only in development mode
 else {
+  // Copy images without minifying in development
+  mix.copyWatched(
+    `${resourcesThemeDirName}/assets/images`,
+    `${wpContentThemeDirName}/assets/images`,
+    { base: `${resourcesThemeDirName}/assets/images` }
+  )
   if (process.env.BROWSER_SYNC_PROXY) {
     // Reloading is necessary to see the change of the SVG file
     // But BrowserSync execute ingection for SVG changes
