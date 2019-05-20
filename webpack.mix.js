@@ -45,7 +45,7 @@ mix
         {
           output: {
             filename: 'assets/svg/sprite.svg',
-            // In development, keep chunk file without deletion
+            // Keep chunk file without deletion
             // Because error occurs if chunk file has deleted when creating mix-manifest.json
             chunk: {
               name: 'assets/js/.svg-dummy-module',
@@ -102,7 +102,7 @@ mix
 if (process.env.NODE_ENV === "production") {
   mix
     .version()
-    // Copy and minify images in production
+    // Copy and optimize images in production
     .imagemin(
       // Options for copying
       [ 'assets/images/**/*' ],
@@ -130,7 +130,7 @@ if (process.env.NODE_ENV === "production") {
 // Only in development mode
 else {
   mix
-    // Copy images without minifying in development
+    // Copy images without optimization in development
     .copyWatched(
       `${resourcesThemeDirName}/assets/images`,
       `${wpContentThemeDirName}/assets/images`,
