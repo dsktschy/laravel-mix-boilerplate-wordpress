@@ -73,9 +73,12 @@ if (process.env.NODE_ENV === "production") {
     .version()
     // Copy and minify images in production
     .imagemin(
+      // Options for copying
       patterns,
       { context: resourcesThemeDirName },
+      // Options for optimization
       {
+        // To find targets exactly, requires test option that is function
         test: filePath => !!multimatch(filePath, patterns).length,
         optipng: { optimizationLevel: 0 }, // 0 ~ 7
         gifsicle: { optimizationLevel: 1 }, // 1 ~ 3
