@@ -65,6 +65,15 @@ mix
       )
     ]
   })
+  // Copy SVG that is not sprite
+  .copyWatched(
+    [
+      `${resourcesThemeDirName}/assets/svg/!(sprite)`,
+      `${resourcesThemeDirName}/assets/svg/!(sprite)/**/*`
+    ],
+    `${wpContentThemeDirName}/assets/svg`,
+    { base: `${resourcesThemeDirName}/assets/svg` }
+  )
 
 // Only in production mode
 if (process.env.NODE_ENV === "production") {
