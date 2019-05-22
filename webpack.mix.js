@@ -1,4 +1,3 @@
-require('dotenv').config()
 const mix = require('laravel-mix')
 const fs = require('fs-extra')
 const multimatch = require('multimatch')
