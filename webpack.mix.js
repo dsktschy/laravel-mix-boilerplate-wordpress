@@ -14,24 +14,24 @@ require('laravel-mix-imagemin')
 //   wp-content/themes/input-theme-name
 const themeName = 'input-theme-name'
 
-const resourcesThemeDirName = `resources/themes/${themeName}`
-const wpContentThemeDirName = `wp-content/themes/${themeName}`
+const srcDirName = `resources/themes/${themeName}`
+const distDirName = `wp-content/themes/${themeName}`
 
 // Clean output directory
-fs.removeSync(`${wpContentThemeDirName}/assets`)
+fs.removeSync(`${distDirName}/assets`)
 
 mix
   // Set output directory of mix-manifest.json
-  .setPublicPath(wpContentThemeDirName)
+  .setPublicPath(distDirName)
   .polyfill()
   .js(
-    `${resourcesThemeDirName}/assets/js/app.js`,
-    `${wpContentThemeDirName}/assets/js`
+    `${srcDirName}/assets/js/app.js`,
+    `${distDirName}/assets/js`
   )
   .eslint()
   .sass(
-    `${resourcesThemeDirName}/assets/css/app.scss`,
-    `${wpContentThemeDirName}/assets/css`
+    `${srcDirName}/assets/css/app.scss`,
+    `${distDirName}/assets/css`
   )
   .stylelint()
   .webpackConfig({
@@ -40,7 +40,7 @@ mix
         // Subdirectories (sprite/**/*.svg) are not allowed
         // Because same ID attribute is output multiple times,
         // if file names are duplicated among multiple directories
-        `${resourcesThemeDirName}/assets/svg/sprite/*.svg`,
+        `${srcDirName}/assets/svg/sprite/*.svg`,
         {
           output: {
             filename: 'assets/svg/sprite.svg',
@@ -65,23 +65,23 @@ mix
   // Copy SVG that is not sprite
   .copyWatched(
     [
-      `${resourcesThemeDirName}/assets/svg/!(sprite)`,
-      `${resourcesThemeDirName}/assets/svg/!(sprite)/**/*`
+      `${srcDirName}/assets/svg/!(sprite)`,
+      `${srcDirName}/assets/svg/!(sprite)/**/*`
     ],
-    `${wpContentThemeDirName}/assets/svg`,
-    { base: `${resourcesThemeDirName}/assets/svg` }
+    `${distDirName}/assets/svg`,
+    { base: `${srcDirName}/assets/svg` }
   )
   .browserSync({
     open: false,
     host: process.env.BROWSER_SYNC_HOST || 'localhost',
     port: process.env.BROWSER_SYNC_PORT || 3000,
     proxy: process.env.BROWSER_SYNC_PROXY || false,
-    // If this setting is `${wpContentThemeDirName}/**/*`,
+    // If this setting is `${distDirName}/**/*`,
     // injection of changes such as CSS will be not available
     // https://github.com/JeffreyWay/laravel-mix/issues/1053
     files: [
-      `${wpContentThemeDirName}/assets/**/*`,
-      `${wpContentThemeDirName}/**/*.php`
+      `${distDirName}/assets/**/*`,
+      `${distDirName}/**/*.php`
     ],
     https:
       process.env.BROWSER_SYNC_HTTPS_CERT &&
@@ -105,7 +105,7 @@ if (process.env.NODE_ENV === "production") {
     .imagemin(
       // Options for copying
       [ 'assets/images/**/*' ],
-      { context: resourcesThemeDirName },
+      { context: srcDirName },
       // Options for optimization
       {
         // To find targets exactly, requires test option that is function
@@ -118,8 +118,8 @@ if (process.env.NODE_ENV === "production") {
     // Delete chunk file for SVG sprite
     .then(() => {
       const svgDummyModuleName = 'assets/js/.svg-dummy-module'
-      fs.removeSync(`${wpContentThemeDirName}/${svgDummyModuleName}.js`)
-      const pathToManifest = `${wpContentThemeDirName}/mix-manifest.json`
+      fs.removeSync(`${distDirName}/${svgDummyModuleName}.js`)
+      const pathToManifest = `${distDirName}/mix-manifest.json`
       const manifest = require(`./${pathToManifest}`)
       delete manifest[`/${svgDummyModuleName}.js`]
       fs.writeFileSync(path.resolve(pathToManifest), JSON.stringify(manifest), 'utf-8')
@@ -131,8 +131,8 @@ else {
   mix
     // Copy images without optimization in development
     .copyWatched(
-      `${resourcesThemeDirName}/assets/images`,
-      `${wpContentThemeDirName}/assets/images`,
-      { base: `${resourcesThemeDirName}/assets/images` }
+      `${srcDirName}/assets/images`,
+      `${distDirName}/assets/images`,
+      { base: `${srcDirName}/assets/images` }
     )
 }
