@@ -98,7 +98,7 @@ mix
   })
 
 // Only in production mode
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   mix
     .version()
     // Copy and optimize images in production
