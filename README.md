@@ -6,9 +6,9 @@
 
 1. Construct WordPress in your favorite way, e.g. Docker, XAMPP, and Local by Flywheel.
 
-2. With symbolic link, reffer `wp-content/themes/input-theme-name` that contains this README.md, from `wp-content/themes/input-theme-name` in your WordPress.
+2. With symbolic link, reffer `public` that contains this README.md, from `wp-content/themes/{your-theme-name}` in your WordPress.
 
-3. From admin page of your constructed WordPress, apply theme: `input-theme-name` .
+3. From admin page of your constructed WordPress, apply theme: `{your-theme-name}` .
 
 4. Create `.env` by copying `.env-sample` , open `.env` , and set WordPress URL to `MIX_BROWSER_SYNC_PROXY` , e.g. `http://localhost:8000` and `http://wordpress.test` .
 
@@ -16,10 +16,6 @@
 
 ### Next
 
-1. Open `wp-content/themes/input-theme-name/style.css` , and edit comments.
+1. Open `public/style.css` , and edit comments.
 
 2. Open `package.json` , and edit properties. Name, description, and more.
-
-3. Open `.env`, and replace `input-theme-name` to your theme name.
-
-4. Rename `resources/themes/input-theme-name` and `wp-content/themes/input-theme-name` to your theme name.

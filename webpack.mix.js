@@ -9,10 +9,10 @@ require('laravel-mix-stylelint')
 require('laravel-mix-imagemin')
 
 const srcRelativePath =
-  (process.env.MIX_SRC_RELATIVE_PATH || 'resources/themes/input-theme-name')
+  (process.env.MIX_SRC_RELATIVE_PATH || 'resources')
     .replace(/\/$/, '')
 const distRelativePath =
-  (process.env.MIX_DIST_RELATIVE_PATH || 'wp-content/themes/input-theme-name')
+  (process.env.MIX_DIST_RELATIVE_PATH || 'public')
     .replace(/\/$/, '')
 
 // Clean public directory
