@@ -19,3 +19,9 @@
 8. Open `http(s)://localhost:3000` to check behavior.
 
 9. Run `npm run build` to output production files.
+
+## Variant
+
+- [Manage wp-content as a whole](https://github.com/dsktschy/laravel-mix-boilerplate-wordpress/tree/wp-content)
+
+- [For static site](https://github.com/dsktschy/laravel-mix-boilerplate-static)
