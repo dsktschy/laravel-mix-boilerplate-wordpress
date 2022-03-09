@@ -10,7 +10,7 @@
 
 4. Run `npm i` and `npm run build` in this directory, to output theme.
 
-5. Link `dist` in this directory and `wp-content/themes/sitename` in your WordPress, as volume or with symlink.
+5. Link `dist` in this directory and `wp-content` in your WordPress, as volume or with symlink.
 
 6. Apply sitename theme in WordPress admin page.
 

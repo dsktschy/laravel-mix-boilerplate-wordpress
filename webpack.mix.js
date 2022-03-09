@@ -20,20 +20,13 @@ const browserslistConfig = [
 const detailedSourceMapMode =
   process.env.MIX_DETAILED_SOURCE_MAP_MODE?.toLowerCase() === 'on'
 
+// Global settings
 mix
   .setPublicPath(distRelativePath)
   .version()
-  .js(
-    `${srcRelativePath}/assets/scripts/index.js`,
-    `${distRelativePath}/assets/scripts`
-  )
   .polyfill({
     targets: browserslistConfig.join(',')
   })
-  .sass(
-    `${srcRelativePath}/assets/styles/index.scss`,
-    `${distRelativePath}/assets/styles`
-  )
   .options({
     autoprefixer: {
       overrideBrowserslist: browserslistConfig
@@ -44,23 +37,41 @@ mix
     false,
     detailedSourceMapMode ? 'inline-cheap-module-source-map' : 'eval'
   )
-  .copyWatched(
-    `${srcRelativePath}/assets/images`,
-    `${distRelativePath}/assets/images`,
-    { base: `${srcRelativePath}/assets/images` }
-  )
   .copyWatched(publicRelativePath, distRelativePath, {
     base: publicRelativePath
   })
+  .browserSync(bsConfig)
+  .before(() => {
+    fs.removeSync(distRelativePath)
+  })
+
+// For themes/laravel-mix-boilerplate-wordpress
+mix
+  .js(
+    `${srcRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/scripts/index.js`,
+    `${distRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/scripts`
+  )
+  .sass(
+    `${srcRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/styles/index.scss`,
+    `${distRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/styles`
+  )
+  .copyWatched(
+    `${srcRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/images`,
+    `${distRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/images`,
+    {
+      base: `${srcRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/images`
+    }
+  )
   .webpackConfig({
     plugins: [
       new SVGSpritemapPlugin(
-        `${srcRelativePath}/assets/sprites/index/*.svg`, // *2
+        `${srcRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/sprites/index/*.svg`, // *2
         {
           output: {
             svgo: svgoConfig,
             svg4everybody: legacyMode,
-            filename: 'assets/sprites/index.svg',
+            filename:
+              'themes/laravel-mix-boilerplate-wordpress/assets/sprites/index.svg',
             chunk: {
               name: '.svg-dummy-module',
               keep: true
@@ -70,12 +81,21 @@ mix
       )
     ]
   })
-  .browserSync(bsConfig)
-  .before(() => {
-    fs.removeSync(distRelativePath)
-  })
   .after(() => {
     if (mix.inProduction()) {
-      fs.removeSync(`${distRelativePath}/assets/scripts/.svg-dummy-module.js`)
+      fs.removeSync(
+        `${distRelativePath}/themes/laravel-mix-boilerplate-wordpress/assets/scripts/.svg-dummy-module.js`
+      )
     }
   })
+
+// For plugins/laravel-mix-boilerplate-wordpress
+mix
+  .js(
+    `${srcRelativePath}/plugins/laravel-mix-boilerplate-wordpress/assets/scripts/app.js`,
+    `${distRelativePath}/plugins/laravel-mix-boilerplate-wordpress/assets/scripts`
+  )
+  .sass(
+    `${srcRelativePath}/plugins/laravel-mix-boilerplate-wordpress/assets/styles/app.scss`,
+    `${distRelativePath}/plugins/laravel-mix-boilerplate-wordpress/assets/styles`
+  )
