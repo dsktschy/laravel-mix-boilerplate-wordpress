@@ -1,6 +1,6 @@
 {
   "name": "laravel-mix-boilerplate-wordpress",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "Boilerplate for WordPress, based on Laravel Mix",
   "main": "index.js",
   "scripts": {
