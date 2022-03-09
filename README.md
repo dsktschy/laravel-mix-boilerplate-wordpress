@@ -2,20 +2,20 @@
 
 ## Usage
 
-### At first
+1. Construct WordPress in your favorite way like Docker and [Local](https://localwp.com/).
 
-1. Construct WordPress in your favorite way, e.g. Docker, XAMPP, and Local by Flywheel.
+2. Duplicate `.env-sample` and rename it to `.env` in this directory.
 
-2. With symbolic link, reffer `public` that contains this README.md, from `wp-content/themes/{your-theme-name}` in your WordPress.
+3. Edit `.env` in this directory, to set variables `MIX_BROWSER_SYNC_PROXY`. If needed, set `MIX_BROWSER_SYNC_HTTPS_KEY` and `MIX_BROWSER_SYNC_HTTPS_CERT` too.
 
-3. From admin page of your constructed WordPress, apply theme: `{your-theme-name}` .
+4. Run `npm i` and `npm run build` in this directory, to output theme.
 
-4. Create `.env` by copying `.env-sample` , open `.env` , and set WordPress URL to `MIX_BROWSER_SYNC_PROXY` , e.g. `http://localhost:8000` and `http://wordpress.test` .
+5. Link `dist` in this directory and `wp-content/themes/sitename` in your WordPress, as volume or with symlink.
 
-5. Run `npm i` and `npm run dev` , you will see sample page in `http://localhost:3000` .
+6. Apply sitename theme in WordPress admin page.
 
-### Next
+7. Run `npm run dev` to develop.
 
-1. Open `public/style.css` , and edit comments.
+8. Open `http(s)://localhost:3000` to check behavior.
 
-2. Open `package.json` , and edit properties. Name, description, and more.
+9. Run `npm run build` to output production files.
